@@ -46,6 +46,14 @@ export default {
   methods:{
     enviar_dados(){
       this.$axios.post('patrimonio/', {nome: this.nome, valor: this.valor, data_compra: this.data_compra, categoria: this.categoria, numero_patrimonio: this.n_patrimonio})
+        .then((response) => {
+          if(response.data.status === "sucesso"){
+            alert("Item inserido com sucesso voltando a página inicial")
+            window.location.href = "/patrimonio"
+          }
+        }).catch((err) => {
+          console.log(e)
+      })
     }
   },
   created() {

@@ -3,7 +3,7 @@
     <div class="flex">
       <div class="flex justify-start items-center flex-wrap">
         <div class="title w-full">
-          <h1 class="h1-style">Patrimonio: {{titulo}} - Quantidade: {{quantidade}}</h1>
+          <h1 class="h1-style">Patrimonio: {{titulo}}</h1>
         </div>
         <div class="w-full">
           <p>Valor de compra: R$ <b>{{valorCompra}}</b></p>
@@ -21,10 +21,6 @@ export default {
   name: "Card",
   props:{
     titulo: {
-      required: true,
-      type: String
-    },
-    quantidade: {
       required: true,
       type: String
     },
