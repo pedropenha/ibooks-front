@@ -1,5 +1,5 @@
 <template>
-  <button :class="classButton">
+  <button :class="classButton" @click="$emit('myFunction')">
     <div class="p-3">
       {{textButton}}
     </div>

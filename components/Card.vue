@@ -3,17 +3,14 @@
     <div class="flex">
       <div class="flex justify-start items-center flex-wrap">
         <div class="title w-full">
-          <h1 class="h1-style">Patrimonio: {{titulo}} - Quantidade: {{Quantidade}}</h1>
+          <h1 class="h1-style">Patrimonio: {{titulo}} - Quantidade: {{quantidade}}</h1>
         </div>
         <div class="w-full">
           <p>Valor de compra: R$ <b>{{valorCompra}}</b></p>
           <p>Numero de patrimonio: <b>{{patrimonioNumber}}</b></p>
         </div>
       </div>
-        <div class="action">
-          <Button text-button="Editar" class-button="info" class="mr-6"></Button>
-          <Button text-button="Excluir" class-button="danger"></Button>
-        </div>
+        <slot></slot>
     </div>
 
   </div>
@@ -27,13 +24,13 @@ export default {
       required: true,
       type: String
     },
-    Quantidade: {
+    quantidade: {
       required: true,
       type: String
     },
     valorCompra: {
       required: true,
-      type: String
+      type: Number
     },
     patrimonioNumber: {
       required: true,
