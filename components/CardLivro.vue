@@ -3,7 +3,7 @@
       <div class="flex">
         <div class="flex justify-start items-center flex-wrap">
           <div class="title w-full">
-            <h1 class="h1-style">Titulo: {{titulo}} - Quantidade de exemplares: {{total}}</h1>
+            <h1 class="h1-style">Titulo: {{titulo}}</h1>
           </div>
           <div class="w-full">
             <p>Total de Paginas: <b>{{paginas}}</b></p>
@@ -31,10 +31,6 @@ import internal from 'stream';
       titulo: {
         required: true,
         type: String
-      },
-      total: {
-        required: true,
-        type: Number
       },
       paginas: {
         required: true,
