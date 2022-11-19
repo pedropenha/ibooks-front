@@ -1,7 +1,7 @@
 <template>
   <section id="cadastroLivro">
     <div class="md:pl-20 md:pr-20 mt-32">
-      <nuxt-link to="/livro" class="mb-36"><Button text-button="Voltar" class-button="info"></Button></nuxt-link>
+      <nuxt-link to="/livros" class="mb-36"><Button text-button="Voltar" class-button="info"></Button></nuxt-link>
       <div class="div-form__control">
         <form class="form-control">
 
@@ -23,7 +23,7 @@
 
           <label for="isbn10" class="label-control">isbn-10</label>
           <input type="text" class="input-form" id="data_compra" v-model="isbn10">
-          
+
           <label for="isbn13" class="label-control">isbn-13</label>
           <input type="text" class="input-form" id="data_compra" v-model="isbn13">
 
@@ -52,7 +52,9 @@ export default {
   },
   methods:{
     enviar_dados(){
-      this.$axios.post('livro/', {nome_titulo: this.titulo, paginas: this.paginas_titulo, idioma: this.id_idiomas, editora: this.id_editoras, isbn10: this.isbn_10, isbn13: this.isbn_13})
+      this.$axios.post('livro/', {nome_titulo: this.titulo, paginas: this.paginas, idioma: this.idiomas, editora: this.editoras, isbn10: this.isbn10, isbn13: this.isbn13})
+      location.reload()
+      window.location.href = '/livros'
     }
   },
   created() {

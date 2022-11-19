@@ -6,23 +6,23 @@
         <form class="form-control">
 
           <label for="nome" class="label-control label-obrigatorio">Nome patrimonio*</label>
-          <input class="input-form" id="nome" v-model="nome" required>
+          <input class="input-form" id="nome" v-model="nome">
 
           <label for="valor" class="label-control label-obrigatorio">Valor patrimonio*</label>
-          <input class="input-form" id="valor" v-model="valor" @keyup="moneyMask()" required>
+          <input class="input-form" id="valor" v-model="valor" @keyup="moneyMask()">
 
-          <label for="data_compra" class="label-control label-obrigatorio">Data de compra*</label>
-          <input type="date" class="input-form" id="data_compra" v-model="data_compra" required>
+          <label for="data_compra" class="label-control">Data de compra</label>
+          <input type="date" class="input-form" id="data_compra" v-model="data_compra">
 
           <label for="categoria" class="label-control label-obrigatorio">Categoria*</label>
-          <select class="input-form" v-model="categoria" required>
-            <option v-for="({idCategoria, nomeCategoria}, index) in categorias" :key="idCategoria" :value="idCategoria">{{nomeCategoria}}</option>
+          <select class="input-form" v-model="categoria">
+            <option v-for="{idCategoria, nomeCategoria} in categoriaArr" :key="idCategoria" :value="idCategoria" :selected="idCategoria === categoria">{{nomeCategoria}}</option>
           </select>
 
           <label for="n_patrimonio" class="label-control label-obrigatorio">Nº Patrimonio*</label>
-          <input type="text" class="input-form" id="n_patrimonio" v-model="n_patrimonio" required>
+          <input type="text" class="input-form" id="n_patrimonio" v-model="n_patrimonio">
 
-          <button type="submit" @click.prevent="enviar_dados" class="primary">Cadastrar patrimonio</button>
+          <button @click.prevent="enviar_dados" class="primary">Cadastrar patrimonio</button>
         </form>
 
       </div>
@@ -32,34 +32,19 @@
 
 <script>
 export default {
-  name: "CadastraPatrimonio",
   data(){
     return{
+      itens: '',
       nome: '',
       valor: '',
       data_compra: '',
+      categoriaArr: '',
       categoria: '',
       n_patrimonio: '',
       categorias: ''
     }
   },
   methods:{
-    enviar_dados(){
-      this.valor = this.valor.substring(3, this.valor.length)
-      this.valor = this.valor.replace(',', '').replace('.', '').replace(/\D/g, '')
-
-      console.log(this.valor)
-      this.$axios.post('patrimonio/', {nome: this.nome, valor: this.valor, data_compra: this.data_compra, categoria: this.categoria, numero_patrimonio: this.n_patrimonio})
-        .then((response) => {
-          if(response.data.status === "sucesso"){
-            alert("Item inserido com sucesso voltando a página inicial")
-            window.location.href = "/patrimonio"
-          }
-        }).catch((err) => {
-        console.log(e)
-      })
-    },
-
     moneyMask(){
       console.log(this.valor)
       this.valor = this.valor.replace('.', '').replace(',', '').replace(/\D/g, '')
@@ -70,11 +55,35 @@ export default {
       )
 
       this.valor = "R$ " + result
-    },
+    }
   },
   created() {
+    this.$axios.get('patrimonio/'+this.$route.params.id).then((response) => {
+      this.itens = response.data.mensagem;
+
+      this.nome = this.itens.nome_patrimonio
+      this.valor = this.itens.valor_patrimonio
+      this.data_compra = this.itens.data_aquisicao
+      this.categoria = this.itens.idCategoria
+      this.n_patrimonio = this.itens.numero_patrimonio
+
+      this.valor = this.valor+""
+
+      this.valor = this.valor.replace('.', '').replace(',', '').replace(/\D/g, '')
+      const options = {minimumFractionDigits: 2}
+
+      const result = new Intl.NumberFormat('pt-BR', options).format(
+        parseInt(this.valor) / 100
+      )
+
+      this.valor = "R$ " + result
+
+    }).catch((e) => {
+      window.location.href="/patrimonio"
+    })
+
     this.$axios.get('categoria/').then((response) => {
-      this.categorias = response.data.mensagem;
+      this.categoriaArr = response.data.mensagem;
     })
   }
 }

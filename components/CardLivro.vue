@@ -13,15 +13,11 @@
             <p>ISBN-13: <b>{{isbn13}}</b></p>
           </div>
         </div>
-          <div class="action">
-            <Button text-button="Editar" class-button="info" class="mr-6"></Button>
-            <Button text-button="Excluir" class-button="danger"></Button>
-          </div>
-      </div>
-  
+        <slot></slot>
+    </div>
     </div>
   </template>
-  
+
   <script>
 import internal from 'stream';
 
@@ -55,7 +51,7 @@ import internal from 'stream';
     }
   }
   </script>
-  
+
   <style>
     .card{
       @apply shadow-lg rounded-md w-full h-auto p-12 transition cursor-pointer border-2
@@ -72,6 +68,5 @@ import internal from 'stream';
     .action{
       @apply flex justify-end items-center w-full
     }
-  
+
   </style>
-  
