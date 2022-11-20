@@ -4,11 +4,17 @@
         <div class="w-full flex justify-end mb-12">
             <nuxt-link to ="/livros/cadastrarLivro"><button class="primary">Cadastrar livro</button></nuxt-link>
         </div>
-        <div class="mb-6" v-for="{id_exemplar, nome_titulo, nome_editora, nome_idioma, paginas_titulo, isbn_10, isbn_13} in itens" :key="id_exemplar">
-          <CardLivro :titulo="nome_titulo" :paginas="paginas_titulo" :idioma="nome_idioma" :editora="nome_editora" :isbn10="isbn_10" :isbn13="isbn_13">
+        <div class="mb-6" v-for="{id_exemplar, nome_titulo, nome_editora, nome_idioma, paginas_titulo, isbn_10, isbn_13, status} in itens" :key="id_exemplar">
+          <CardLivro :titulo="nome_titulo" :paginas="paginas_titulo" :idioma="nome_idioma" :editora="nome_editora" :isbn10="isbn_10" :isbn13="isbn_13" :status="status === 1">
             <div class="action">
+<<<<<<< HEAD
               <nuxt-link :to="'/livros/'+id_exemplar"><button class="info mr-6">Editar</button></nuxt-link>
               <button @click.prevent="excluir(id_exemplar, nome_titulo)" class="danger">Excluir</button>
+=======
+              <nuxt-link :to="'/livros/'+id_exemplar" v-if="status === 0"><button class="warning mr-6">Dar baixa no livro</button></nuxt-link>
+              <button class="info mr-6">Editar</button>
+              <button @click.prevent="excluir(id_exemplar)" class="danger">Excluir</button>
+>>>>>>> 31df918bf38c7fb9b5071fe9f51a60d71996ab2d
             </div>
           </CardLivro>
         </div>
@@ -31,7 +37,7 @@
           this.$axios.post('/livro/deletar', {id_exemplar: id})
           location.reload()
         }
-      }
+      },
     },
   created() {
     this.$axios.get('livro/').then((response) => {
@@ -62,5 +68,13 @@
     }
     .info:hover{
       @apply bg-blue-700 shadow-blue-600;
+    }
+
+    .warning{
+      @apply bg-yellow-400 shadow-yellow-300 shadow-md text-white rounded-md transition p-4;
+    }
+
+    .warning:hover{
+      @apply bg-yellow-500 shadow-yellow-500;
     }
   </style>

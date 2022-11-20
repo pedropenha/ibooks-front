@@ -1,7 +1,9 @@
 <template>
   <section id="cadastroPatrimonio">
     <div class="md:pl-20 md:pr-20 mt-32">
-      <nuxt-link to="/patrimonio" class="mb-36"><Button text-button="Voltar" class-button="info"></Button></nuxt-link>
+      <nuxt-link to="/patrimonio" class="mb-36">
+        <Button text-button="Voltar" class-button="info"></Button>
+      </nuxt-link>
       <div class="div-form__control">
         <form class="form-control">
 
@@ -16,7 +18,9 @@
 
           <label for="categoria" class="label-control label-obrigatorio">Categoria*</label>
           <select class="input-form" v-model="categoria">
-            <option v-for="{idCategoria, nomeCategoria} in categoriaArr" :key="idCategoria" :value="idCategoria" :selected="idCategoria === categoria">{{nomeCategoria}}</option>
+            <option v-for="{idCategoria, nomeCategoria} in categoriaArr" :key="idCategoria" :value="idCategoria"
+                    :selected="idCategoria === categoria">{{ nomeCategoria }}
+            </option>
           </select>
 
           <label for="n_patrimonio" class="label-control label-obrigatorio">Nº Patrimonio*</label>
@@ -32,8 +36,8 @@
 
 <script>
 export default {
-  data(){
-    return{
+  data() {
+    return {
       itens: '',
       nome: '',
       valor: '',
@@ -44,8 +48,30 @@ export default {
       categorias: ''
     }
   },
-  methods:{
-    moneyMask(){
+  methods: {
+    enviar_dados() {
+      this.valor = this.valor.substring(3, this.valor.length)
+      this.valor = this.valor.replace(',', '').replace('.', '').replace(/\D/g, '')
+
+      this.$axios.post('patrimonio/editar', {
+        nome: this.nome,
+        valor: this.valor,
+        data_compra: this.data_compra,
+        categoria: this.categoria,
+        numero_patrimonio: this.n_patrimonio,
+        idPatrimonio: this.$route.params.id
+      })
+        .then((response) => {
+          if (response.data.status === "sucesso") {
+            alert("Item atualizado com sucesso, voltando a página de patrimonio")
+            window.location.href = "/patrimonio"
+          }
+        }).catch((err) => {
+        alert("Erro inesperado, contacte o administrador do sistema, redirecionando para página de patrimonios")
+        window.location.href = "/patrimonio"
+      })
+    },
+    moneyMask() {
       console.log(this.valor)
       this.valor = this.valor.replace('.', '').replace(',', '').replace(/\D/g, '')
       const options = {minimumFractionDigits: 2}
@@ -58,7 +84,7 @@ export default {
     }
   },
   created() {
-    this.$axios.get('patrimonio/'+this.$route.params.id).then((response) => {
+    this.$axios.get('patrimonio/' + this.$route.params.id).then((response) => {
       this.itens = response.data.mensagem;
 
       this.nome = this.itens.nome_patrimonio
@@ -67,7 +93,7 @@ export default {
       this.categoria = this.itens.idCategoria
       this.n_patrimonio = this.itens.numero_patrimonio
 
-      this.valor = this.valor+""
+      this.valor = this.valor + ""
 
       this.valor = this.valor.replace('.', '').replace(',', '').replace(/\D/g, '')
       const options = {minimumFractionDigits: 2}
@@ -79,7 +105,7 @@ export default {
       this.valor = "R$ " + result
 
     }).catch((e) => {
-      window.location.href="/patrimonio"
+      window.location.href = "/patrimonio"
     })
 
     this.$axios.get('categoria/').then((response) => {
@@ -90,28 +116,35 @@ export default {
 </script>
 
 <style scoped>
-  .input-form{
-    @apply border-gray-400 w-full border-b transition mb-6
-  }
-  .input-form:hover{
-    @apply border-gray-800
-  }
-  .form-control{
-    @apply flex justify-center items-center flex-wrap w-6/12
-  }
-  .div-form__control{
-    @apply w-full flex justify-center
-  }
-  .label-control{
-    @apply w-full mb-2
-  }
-  .primary{
-    @apply bg-green-400 shadow-md shadow-green-300 text-white rounded-md transition p-6;
-  }
-  .primary:hover{
-    @apply bg-green-500 shadow-green-400;
-  }
-  .label-obrigatorio{
-    @apply text-red-900;
-  }
+.input-form {
+  @apply border-gray-400 w-full border-b transition mb-6
+}
+
+.input-form:hover {
+  @apply border-gray-800
+}
+
+.form-control {
+  @apply flex justify-center items-center flex-wrap w-6/12
+}
+
+.div-form__control {
+  @apply w-full flex justify-center
+}
+
+.label-control {
+  @apply w-full mb-2
+}
+
+.primary {
+  @apply bg-green-400 shadow-md shadow-green-300 text-white rounded-md transition p-6;
+}
+
+.primary:hover {
+  @apply bg-green-500 shadow-green-400;
+}
+
+.label-obrigatorio {
+  @apply text-red-900;
+}
 </style>

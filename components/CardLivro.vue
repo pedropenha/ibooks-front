@@ -3,7 +3,7 @@
       <div class="flex">
         <div class="flex justify-start items-center flex-wrap">
           <div class="title w-full">
-            <h1 class="h1-style">Titulo: {{titulo}}</h1>
+            <h1 class="h1-style">Titulo: {{titulo}}</h1> <span v-if="status === true" class="desativado"> Desativado</span>
           </div>
           <div class="w-full">
             <p>Total de Paginas: <b>{{paginas}}</b></p>
@@ -47,6 +47,10 @@ import internal from 'stream';
       isbn13: {
         required: true,
         type: String
+      },
+      status:{
+        required: true,
+        type: Boolean
       }
     }
   }
@@ -67,6 +71,9 @@ import internal from 'stream';
     }
     .action{
       @apply flex justify-end items-center w-full
+    }
+    .desativado{
+      @apply bg-red-700 rounded-lg text-white p-1 ml-5
     }
 
   </style>
