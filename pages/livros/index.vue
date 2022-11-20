@@ -7,8 +7,8 @@
         <div class="mb-6" v-for="{id_exemplar, nome_titulo, nome_editora, nome_idioma, paginas_titulo, isbn_10, isbn_13} in itens" :key="id_exemplar">
           <CardLivro :titulo="nome_titulo" :paginas="paginas_titulo" :idioma="nome_idioma" :editora="nome_editora" :isbn10="isbn_10" :isbn13="isbn_13">
             <div class="action">
-              <button class="info mr-6">Editar</button>
-              <button @click.prevent="excluir(id_exemplar)" class="danger">Excluir</button>
+              <nuxt-link :to="'/livros/'+id_exemplar"><button class="info mr-6">Editar</button></nuxt-link>
+              <button @click.prevent="excluir(id_exemplar, nome_titulo)" class="danger">Excluir</button>
             </div>
           </CardLivro>
         </div>

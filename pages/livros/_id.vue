@@ -1,5 +1,5 @@
 <template>
-  <section id="cadastroLivro">
+  <section id="editarLivro">
     <div class="md:pl-20 md:pr-20 mt-32">
       <nuxt-link to="/livros" class="mb-36">
         <Button text-button="Voltar" class-button="info"></Button>
@@ -9,32 +9,32 @@
 
           <label for="titulo" class="label-control label-obrigatorio">Titulo *</label>
           <select class="input-form" v-model="titulo">
-            <option v-for="{id_titulo, nome_titulo} in titulos" :key="id_titulo" :value="id_titulo">
+            <option v-for="{id_titulo, nome_titulo} in editora" :key="id_titulo" :value="id_titulo">
               {{ nome_titulo }}
             </option>
           </select>
 
-          <label for="paginas" class="label-control">Numero de Paginas</label>
+          <label for="paginas" class="label-control label-obrigatorio">Numero de Paginas *</label>
           <input class="input-form" id="paginas" v-model="paginas">
 
-          <label for="idioma" class="label-control">Idioma</label>
-          <select class="input-form" v-model="idioma">
-            <option v-for="{id_idioma, nome_idioma} in idiomas" :key="id_idioma" :value="id_idioma">{{ nome_idioma }}
+          <label for="idioma" class="label-control">Idioma *</label>
+          <select class="input-form" v-model="idiomas">
+            <option v-for="{id_idioma, nome_idioma} in idioma" :key="id_idioma" :value="id_idioma">{{ nome_idioma }}
             </option>
           </select>
 
-          <label for="editora" class="label-control">Editora</label>
-          <select class="input-form" v-model="editora">
-            <option v-for="{id_editora, nome_editora} in editoras" :key="id_editora" :value="id_editora">
+          <label for="editora" class="label-control label-obrigatorio">Editora *</label>
+          <select class="input-form" v-model="editoras">
+            <option v-for="{id_editora, nome_editora} in editora" :key="id_editora" :value="id_editora">
               {{ nome_editora }}
             </option>
           </select>
 
-          <label for="isbn10" class="label-control">isbn-10</label>
-          <input type="text" class="input-form" id="isbn10" v-model="isbn10">
+          <label for="isbn10" class="label-control label-obrigatorio">Isbn_10 *</label>
+          <input type="text" class="input-form" id="isbn10" v-model="isbn10" max="10">
 
-          <label for="isbn13" class="label-control">isbn-13</label>
-          <input type="text" class="input-form" id="isbn13" v-model="isbn13">
+          <label for="isbn13" class="label-control label-obrigatorio">Isbn_13 *</label>
+          <input type="text" class="input-form" id="isbn13" v-model="isbn13" max="14">
 
           <button @click.prevent="enviar_dados" class="primary">Cadastrar Livro</button>
         </form>
@@ -46,15 +46,13 @@
 
 <script>
 export default {
-  name: "CadastraLivro",
   data() {
     return {
-      titulos: [],
       titulo: '',
       paginas: '',
-      idiomas: [],
+      idiomas: '',
       idioma: '',
-      editoras: [],
+      editoras: '',
       editora: '',
       isbn10: '',
       isbn13: ''
@@ -62,11 +60,11 @@ export default {
   },
   methods: {
     enviar_dados() {
-      this.$axios.post('livro/', {
+      this.$axios.post('livro/editar', {
         nome_titulo: this.titulo,
         paginas_titulo: this.paginas,
-        id_idioma: this.idioma,
-        id_editora: this.editora,
+        id_idioma: this.idiomas,
+        id_editora: this.editoras,
         isbn_10: this.isbn10,
         isbn_13: this.isbn13
       })
@@ -75,16 +73,27 @@ export default {
     }
   },
   created() {
+    this.$axios.get('livro/' + this.$route.params.id).then((response) => {
+      console.log(response.data.mensagem)
+      this.itens = response.data.mensagem;
+
+      this.titulo = response.data.mensagem.nome_titulo
+      this.paginas = response.data.mensagem.paginas_titulo
+      this.idiomas = response.data.mensagem.id_idioma
+      this.editoras = response.data.mensagem.id_editora
+      this.isbn10 = response.data.mensagem.isbn_10
+      this.isbn13 = response.data.mensagem.isbn_13
+
+    }).catch((e) => {
+      // alert('erro ao atualizar')
+    })
+
     this.$axios.get('livro/idiomas').then((response) => {
-      this.idiomas = response.data.mensagem;
+      this.idioma = response.data.mensagem;
       console.log(this.idioma);
     })
     this.$axios.get('livro/editoras').then((response) => {
-      this.editoras = response.data.mensagem;
-      console.log(this.editora);
-    })
-    this.$axios.get('livro/titulos').then((response) => {
-      this.titulos = response.data.mensagem;
+      this.editora = response.data.mensagem;
       console.log(this.editora);
     })
   }
@@ -118,5 +127,9 @@ export default {
 
 .primary:hover {
   @apply bg-green-500 shadow-green-400;
+}
+
+.label-obrigatorio {
+  @apply text-red-900;
 }
 </style>
