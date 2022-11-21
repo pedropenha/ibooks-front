@@ -87,6 +87,15 @@ export default {
       this.titulos = response.data.mensagem;
       console.log(this.editora);
     })
+
+    if(localStorage.getItem('usuario') === null)
+    {
+      window.location.href = "/login"
+    }
+
+    if(JSON.parse(localStorage.getItem('usuario')).nivelAcesso < 1){
+      window.location.href = '/livros'
+    }
   }
 }
 </script>

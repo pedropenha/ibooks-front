@@ -1,5 +1,6 @@
 <template>
   <section id="patrimonio">
+    <NavBar/>
     <div class="md:pl-20 md:pr-20 mt-32">
       <div class="w-full flex justify-end mb-12">
         <nuxt-link to="/patrimonio/cadastraPatrimonio"><button class="primary">Cadastrar patrimonio</button></nuxt-link>
@@ -29,6 +30,7 @@ export default {
   data(){
     return{
       itens: [],
+
     }
   },
   methods:{
@@ -45,6 +47,11 @@ export default {
     }).catch((e) => {
       console.log(error);
     })
+
+    if(localStorage.getItem('usuario') === null)
+    {
+      window.location.href = "/login"
+    }
   }
 }
 </script>

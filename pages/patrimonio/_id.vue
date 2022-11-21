@@ -1,5 +1,6 @@
 <template>
   <section id="cadastroPatrimonio">
+    <NavBar/>
     <div class="md:pl-20 md:pr-20 mt-32">
       <nuxt-link to="/patrimonio" class="mb-36">
         <Button text-button="Voltar" class-button="info"></Button>
@@ -111,6 +112,15 @@ export default {
     this.$axios.get('categoria/').then((response) => {
       this.categoriaArr = response.data.mensagem;
     })
+
+    if(localStorage.getItem('usuario') === null)
+    {
+      window.location.href = "/login"
+    }
+
+    if(JSON.parse(localStorage.getItem('usuario')).nivelAcesso < 1){
+      window.location.href = '/patrimonio'
+    }
   }
 }
 </script>

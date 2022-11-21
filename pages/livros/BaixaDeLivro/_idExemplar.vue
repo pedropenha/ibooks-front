@@ -48,11 +48,14 @@ export default {
     }
   },
   created() {
-    let teste = {
-      user: "Pedro",
-      nivelAcesso: "1"
+    if(localStorage.getItem('usuario') === null)
+    {
+      window.location.href = "/login"
     }
-    localStorage.setItem('usuario', JSON.stringify(teste))
+
+    if(JSON.parse(localStorage.getItem('usuario')).nivelAcesso < 1){
+      window.location.href = '/livros'
+    }
   }
 }
 </script>
