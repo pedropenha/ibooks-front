@@ -63,15 +63,15 @@ export default {
   methods: {
     enviar_dados() {
       this.$axios.post('livro/', {
-        nome_titulo: this.titulo,
+        id_titulo: this.titulo,
         paginas_titulo: this.paginas,
         id_idioma: this.idioma,
         id_editora: this.editora,
         isbn_10: this.isbn10,
         isbn_13: this.isbn13
       })
-      location.reload()
-      window.location.href = '/livros'
+      // location.reload()
+      // window.location.href = '/livros'
     }
   },
   created() {
@@ -85,7 +85,7 @@ export default {
     })
     this.$axios.get('livro/titulos').then((response) => {
       this.titulos = response.data.mensagem;
-      console.log(this.editora);
+      console.log(this.titulo);
     })
 
     if(localStorage.getItem('usuario') === null)

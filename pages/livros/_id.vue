@@ -9,7 +9,7 @@
 
           <label for="titulo" class="label-control label-obrigatorio">Titulo *</label>
           <select class="input-form" v-model="titulo">
-            <option v-for="{id_titulo, nome_titulo} in editora" :key="id_titulo" :value="id_titulo">
+            <option v-for="{id_titulo, nome_titulo} in titulos" :key="id_titulo" :value="id_titulo" :selected="id_titulo === titulo">
               {{ nome_titulo }}
             </option>
           </select>
@@ -18,14 +18,14 @@
           <input class="input-form" id="paginas" v-model="paginas">
 
           <label for="idioma" class="label-control">Idioma *</label>
-          <select class="input-form" v-model="idiomas">
-            <option v-for="{id_idioma, nome_idioma} in idioma" :key="id_idioma" :value="id_idioma">{{ nome_idioma }}
+          <select class="input-form" v-model="idioma">
+            <option v-for="{id_idioma, nome_idioma} in idiomas" :key="id_idioma" :value="id_idioma" :selected="id_idioma === idioma">{{ nome_idioma }}
             </option>
           </select>
 
           <label for="editora" class="label-control label-obrigatorio">Editora *</label>
-          <select class="input-form" v-model="editoras">
-            <option v-for="{id_editora, nome_editora} in editora" :key="id_editora" :value="id_editora">
+          <select class="input-form" v-model="editora">
+            <option v-for="{id_editora, nome_editora} in editoras" :key="id_editora" :value="id_editora" :selected="id_editora === editora">
               {{ nome_editora }}
             </option>
           </select>
@@ -49,10 +49,11 @@ export default {
   data() {
     return {
       titulo: '',
+      titulos: [],
       paginas: '',
-      idiomas: '',
+      idiomas: [],
       idioma: '',
-      editoras: '',
+      editoras: [],
       editora: '',
       isbn10: '',
       isbn13: ''
@@ -62,14 +63,14 @@ export default {
     enviar_dados() {
       this.$axios.post('livro/editar', {
         nome_titulo: this.titulo,
-        paginas_titulo: this.paginas,
-        id_idioma: this.idiomas,
+        paginas_titulo: this.pagina,
+        id_idioma: this.idioma,
         id_editora: this.editoras,
         isbn_10: this.isbn10,
         isbn_13: this.isbn13
       })
-      location.reload()
-      window.location.href = '/livros'
+      // location.reload()
+      // window.location.href = '/livros'
     }
   },
   created() {
@@ -77,10 +78,10 @@ export default {
       console.log(response.data.mensagem)
       this.itens = response.data.mensagem;
 
-      this.titulo = response.data.mensagem.nome_titulo
+      this.titulo = response.data.mensagem.id_titulo
       this.paginas = response.data.mensagem.paginas_titulo
-      this.idiomas = response.data.mensagem.id_idioma
-      this.editoras = response.data.mensagem.id_editora
+      this.idioma = response.data.mensagem.id_idioma
+      this.editora = response.data.mensagem.id_editora
       this.isbn10 = response.data.mensagem.isbn_10
       this.isbn13 = response.data.mensagem.isbn_13
 
@@ -89,12 +90,16 @@ export default {
     })
 
     this.$axios.get('livro/idiomas').then((response) => {
-      this.idioma = response.data.mensagem;
+      this.idiomas = response.data.mensagem;
       console.log(this.idioma);
     })
     this.$axios.get('livro/editoras').then((response) => {
-      this.editora = response.data.mensagem;
+      this.editoras = response.data.mensagem;
       console.log(this.editora);
+    })
+    this.$axios.get('livro/titulos').then((response) => {
+      this.titulos = response.data.mensagem;
+      console.log(this.titulo);
     })
 
     if(localStorage.getItem('usuario') === null)

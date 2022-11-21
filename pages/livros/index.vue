@@ -18,7 +18,7 @@
             <nuxt-link :to="'/livros/'+id_exemplar">
               <button class="info mr-6">Editar</button>
             </nuxt-link>
-            <button @click.prevent="excluir(id_exemplar, nome_titulo)" class="danger">Excluir</button>
+            <button @click.prevent="excluir(id_exemplar)" class="danger">Excluir</button>
           </div>
         </CardLivro>
       </div>
@@ -38,8 +38,11 @@ export default {
   methods: {
     excluir(id) {
       if (confirm("Deseja realmente excluir?")) {
-        this.$axios.post('/livro/deletar', {id_exemplar: id})
-        location.reload()
+        this.$axios.delete('/livro/'+id).then((response) => {
+          location.reload()
+          }).catch((erro) => {
+          alert(erro)
+        })
       }
     },
   },
