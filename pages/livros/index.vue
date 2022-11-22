@@ -7,9 +7,9 @@
         </nuxt-link>
       </div>
       <div class="mb-6"
-           v-for="{id_exemplar, nome_titulo, nome_editora, nome_idioma, paginas_titulo, isbn_10, isbn_13, status} in itens"
+           v-for="{id_exemplar, nome_titulo, nome_editora, nome_idioma, paginas_exemplar, isbn_10, isbn_13, status} in itens"
            :key="id_exemplar">
-        <CardLivro :titulo="nome_titulo" :paginas="paginas_titulo" :idioma="nome_idioma" :editora="nome_editora"
+        <CardLivro :titulo="nome_titulo" :paginas="paginas_exemplar" :idioma="nome_idioma" :editora="nome_editora"
                    :isbn10="isbn_10" :isbn13="isbn_13" :status="status === 1">
           <div class="action">
             <nuxt-link :to="'/livros/baixaDeLivro/'+id_exemplar" v-if="status === 0 && nivel_acesso.nivel_acesso === 1">

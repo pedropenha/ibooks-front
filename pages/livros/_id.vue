@@ -36,7 +36,7 @@
           <label for="isbn13" class="label-control label-obrigatorio">Isbn_13 *</label>
           <input type="text" class="input-form" id="isbn13" v-model="isbn13" max="14">
 
-          <button @click.prevent="enviar_dados" class="primary">Cadastrar Livro</button>
+          <button @click.prevent="enviar_dados" class="primary">Alterar Livro</button>
         </form>
 
       </div>
@@ -56,30 +56,39 @@ export default {
       editoras: [],
       editora: '',
       isbn10: '',
-      isbn13: ''
+      isbn13: '',
+      exemplar: ''
     }
   },
   methods: {
     enviar_dados() {
-      this.$axios.post('livro/editar', {
-        nome_titulo: this.titulo,
-        paginas_titulo: this.pagina,
-        id_idioma: this.idioma,
-        id_editora: this.editoras,
-        isbn_10: this.isbn10,
-        isbn_13: this.isbn13
-      })
-      // location.reload()
-      // window.location.href = '/livros'
+      if (confirm("Deseja realmente alterar?")) {
+        this.$axios.post('livro/editar', {
+          id_exemplar: this.exemplar,
+          id_titulo: this.titulo,
+          paginas_exemplar: this.paginas,
+          id_idioma: this.idioma,
+          id_editora: this.editora,
+          isbn_10: this.isbn10,
+          isbn_13: this.isbn13
+        }).then((response) => {
+          //location.reload()
+          window.location.href = '/livros'
+        }).catch((erro) => {
+          alert(erro)
+        })
+      }
     }
   },
+
   created() {
     this.$axios.get('livro/' + this.$route.params.id).then((response) => {
       console.log(response.data.mensagem)
       this.itens = response.data.mensagem;
 
+      this.exemplar = response.data.mensagem.id_exemplar
       this.titulo = response.data.mensagem.id_titulo
-      this.paginas = response.data.mensagem.paginas_titulo
+      this.paginas = response.data.mensagem.paginas_exemplar
       this.idioma = response.data.mensagem.id_idioma
       this.editora = response.data.mensagem.id_editora
       this.isbn10 = response.data.mensagem.isbn_10

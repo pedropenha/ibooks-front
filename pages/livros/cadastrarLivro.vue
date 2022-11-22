@@ -62,16 +62,21 @@ export default {
   },
   methods: {
     enviar_dados() {
-      this.$axios.post('livro/', {
-        id_titulo: this.titulo,
-        paginas_titulo: this.paginas,
-        id_idioma: this.idioma,
-        id_editora: this.editora,
-        isbn_10: this.isbn10,
-        isbn_13: this.isbn13
-      })
-      // location.reload()
-      // window.location.href = '/livros'
+      if (confirm("Confirmar cadastro?")) {
+        this.$axios.post('livro/', {
+          id_titulo: this.titulo,
+          paginas_exemplar: this.paginas,
+          id_idioma: this.idioma,
+          id_editora: this.editora,
+          isbn_10: this.isbn10,
+          isbn_13: this.isbn13
+        }).then((response) => {
+          //location.reload()
+          window.location.href = '/livros'
+        }).catch((erro) => {
+          alert(erro)
+        })
+      }
     }
   },
   created() {
