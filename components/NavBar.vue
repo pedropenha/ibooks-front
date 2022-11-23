@@ -6,7 +6,7 @@
     </div>
 
     <div class="flex items-center">
-      <nuxt-link to="/patrimonio" :class='this.$route.path.includes("/patrimonio")  ? "ativo" : "rota"'>Patrimonio</nuxt-link>
+      <nuxt-link to="/patrimonio" :class='this.$route.path.includes("/patrimonio")  ? "ativo" : "rota"' v-if="nivel_acesso.nivel_acesso > 0">Patrimonio</nuxt-link>
       <nuxt-link to="/livros" :class='this.$route.path === "/livros" ? "ativo ml-2" : "rota ml-2"'>Livros</nuxt-link>
     </div>
 

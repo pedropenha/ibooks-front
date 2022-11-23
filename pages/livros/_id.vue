@@ -1,5 +1,6 @@
 <template>
   <section id="editarLivro">
+    <NavBar/>
     <div class="md:pl-20 md:pr-20 mt-32">
       <nuxt-link to="/livros" class="mb-36">
         <Button text-button="Voltar" class-button="info"></Button>

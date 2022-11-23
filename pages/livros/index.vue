@@ -1,24 +1,29 @@
 <template>
   <section id="livro">
+    <NavBar/>
     <div class="md:pl-20 md:pr-20 mt-32">
       <div class="w-full flex justify-end mb-12">
         <nuxt-link to="/livros/cadastrarLivro">
-          <button class="primary">Cadastrar livro</button>
+          <button class="primary" v-if="nivel_acesso === 1">Cadastrar livro</button>
         </nuxt-link>
       </div>
       <div class="mb-6"
-           v-for="{id_exemplar, nome_titulo, nome_editora, nome_idioma, paginas_exemplar, isbn_10, isbn_13, status} in itens"
+           v-for="{id_exemplar, nome_titulo, nome_editora, nome_idioma, paginas_exemplar, isbn_10, isbn_13, status, exemplares_disponiveis, id_pessoa_fisica} in itens"
            :key="id_exemplar">
         <CardLivro :titulo="nome_titulo" :paginas="paginas_exemplar" :idioma="nome_idioma" :editora="nome_editora"
-                   :isbn10="isbn_10" :isbn13="isbn_13" :status="status === 1">
+                   :isbn10="isbn_10" :isbn13="isbn_13" :status="status">
           <div class="action">
-            <nuxt-link :to="'/livros/baixaDeLivro/'+id_exemplar" v-if="status === 0 && nivel_acesso.nivel_acesso === 1">
+            <nuxt-link :to="'/livros/baixaDeLivro/'+id_exemplar" v-if="status === 0 && nivel_acesso === 1">
               <button class="warning mr-6">Dar baixa no livro</button>
             </nuxt-link>
-            <nuxt-link :to="'/livros/'+id_exemplar">
+
+            <nuxt-link :to="'/livros/'+id_exemplar" v-if="nivel_acesso === 1">
               <button class="info mr-6">Editar</button>
             </nuxt-link>
-            <button @click.prevent="excluir(id_exemplar)" class="danger">Excluir</button>
+            <button @click.prevent="excluir(id_exemplar)" class="danger" v-if="nivel_acesso === 1">Excluir</button>
+              <button  v-if="nivel_acesso === 0" @click.prevent="fila_espera(id_exemplar)" class="info mr-6" :disabled="flag === id_exemplar">
+                Entrar na fila de espera
+              </button>
           </div>
         </CardLivro>
       </div>
@@ -31,11 +36,27 @@ export default {
   name: 'Livro',
   data() {
     return {
+      flag: false,
       itens: '',
-      nivel_acesso: JSON.parse(localStorage.getItem('usuario'))
+      pessoa: JSON.parse(localStorage.getItem('usuario')).id_pessoa_fisica,
+      nivel_acesso: JSON.parse(localStorage.getItem('usuario')).nivel_acesso,
     }
   },
   methods: {
+    fila_espera(id_exemplar) {
+      if (confirm("Deseja realmente entrar na fila de espera?")) {
+        this.$axios.post('/filaDeEspera/',{
+          id_exemplar: id_exemplar,
+          id_pessoa_fisica: this.pessoa
+
+        }).then((response) => {
+          this.flag = id_exemplar;
+          // location.reload()
+        }).catch((erro) => {
+          alert(erro)
+        })
+      }
+    },
     excluir(id) {
       if (confirm("Deseja realmente excluir?")) {
         this.$axios.delete('/livro/'+id).then((response) => {
@@ -45,19 +66,33 @@ export default {
         })
       }
     },
-  },
-  created() {
-    this.$axios.get('livro/').then((response) => {
 
-      this.itens = response.data.mensagem;
-    }).catch((e) => {
-      console.log(error);
-    })
-    if(localStorage.getItem('usuario') === null)
-    {
+  },
+
+  created() {
+    if(localStorage.getItem('usuario') !== null && JSON.parse(localStorage.getItem('usuario')).nivel_acesso >0){
+      this.$axios.get('livro/').then((response) => {
+
+        this.itens = response.data.mensagem;
+        console.log(response.data.mensagem);
+      }).catch((e) => {
+        console.log(e);
+      })
+    }
+    else{
+      this.$axios.get('livro/grupo').then((response) => {
+        this.itens = response.data.mensagem;
+      }).catch((e) => {
+        console.log(e);
+      })
+    }
+
+
+
+    if(localStorage.getItem('usuario') === null) {
       window.location.href = "/login"
     }
-  }
+  },
 }
 </script>
 
@@ -86,6 +121,10 @@ export default {
   @apply bg-blue-700 shadow-blue-600;
 }
 
+.info:disabled {
+  @apply opacity-30 cursor-not-allowed;
+}
+
 .warning {
   @apply bg-yellow-400 shadow-yellow-300 shadow-md text-white rounded-md transition p-4;
 }
@@ -93,4 +132,6 @@ export default {
 .warning:hover {
   @apply bg-yellow-500 shadow-yellow-500;
 }
+
 </style>
+

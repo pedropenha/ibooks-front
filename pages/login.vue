@@ -41,7 +41,7 @@ export default {
       console.log(this.cpf)
       this.$axios.post('/login/', {cpf: this.cpf, senha: this.senha}).then((response) => {
         localStorage.setItem('usuario', JSON.stringify(response.data.mensagem))
-        window.location.href = '/patrimonio'
+        window.location.href = '/livros'
       }).catch((e) => {
         console.log(e)
       })
@@ -59,7 +59,7 @@ export default {
   created() {
     if(localStorage.getItem('usuario') !== null)
     {
-      window.location.href = "/patrimonio"
+      window.location.href = "/livros"
     }
   }
 }
