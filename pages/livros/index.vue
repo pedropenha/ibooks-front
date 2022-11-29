@@ -13,6 +13,10 @@
         <CardLivro :titulo="nome_titulo" :paginas="paginas_exemplar" :idioma="nome_idioma" :editora="nome_editora"
                    :isbn10="isbn_10" :isbn13="isbn_13" :status="status">
           <div class="action">
+            <nuxt-link :to="'/livros/emprestarExemplar/'+id_exemplar" v-if="nivel_acesso === 1 && status === 0">
+              <button class="success mr-6">Emprestar</button>
+            </nuxt-link>
+
             <nuxt-link :to="'/livros/baixaDeLivro/'+id_exemplar" v-if="status === 0 && nivel_acesso === 1">
               <button class="warning mr-6">Dar baixa no livro</button>
             </nuxt-link>
@@ -21,9 +25,9 @@
               <button class="info mr-6">Editar</button>
             </nuxt-link>
             <button @click.prevent="excluir(id_exemplar)" class="danger" v-if="nivel_acesso === 1">Excluir</button>
-              <button  v-if="nivel_acesso === 0" @click.prevent="fila_espera(id_exemplar)" class="info mr-6" :disabled="flag === id_exemplar">
-                Entrar na fila de espera
-              </button>
+            <button  v-if="nivel_acesso === 0" @click.prevent="fila_espera(id_exemplar)" class="info mr-6" :disabled="flag === id_exemplar">
+              Entrar na fila de espera
+            </button>
           </div>
         </CardLivro>
       </div>
@@ -131,6 +135,14 @@ export default {
 
 .warning:hover {
   @apply bg-yellow-500 shadow-yellow-500;
+}
+
+.success{
+  @apply bg-green-600 shadow-green-400 shadow-md text-white rounded-md transition p-4
+}
+
+.success:hover{
+  @apply bg-green-700 shadow-green-700;
 }
 
 </style>
